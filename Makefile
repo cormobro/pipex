@@ -1,4 +1,4 @@
-SRCS = $(addprefix Sources/, pipex.c pipex_utils.c ft_split.c)
+SRCS = $(addprefix Sources/, pipex.c pipex_utils.c ft_split.c process.c ft_strjoin.c)
 
 NAME = pipex
 

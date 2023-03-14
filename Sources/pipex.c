@@ -48,16 +48,22 @@ void	pipex(int fd1, int fd2, char **argv, char **envp)
 }
 int	main(int argc, char **argv, char **envp)
 {
-	char *res;
+	t_pipex	data;
 
-	(void)argv;
+	data.path = get_path(envp);
 	if (argc == 5)
 	{
-		
+		if (pipe(data.pipe) == -1)
+			ft_printerror("Pipe error");
+		data.parent_pid = fork();
+		if (data.parent_pid < 0)
+			ft_printerror("Fork error");
+		if (data.parent_pid == 0)
+			ft_childprocess(&data, envp, argv);
+		waitpid(data.parent_pid, NULL, 0);
+		ft_parentprocess(&data, envp, argv);
 	}
 	else
-		ft_printerror();
-	res = *get_path(envp);
-	printf("%s\n", res);
+		ft_printerror("Arguments error");
 	return (0);
 }

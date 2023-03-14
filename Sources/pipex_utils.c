@@ -71,3 +71,37 @@ char	*ft_substr(const char *s, unsigned int start, size_t len)
 	return (res);
 }
 
+void	ft_printerror(char *err)
+{
+	perror(err);
+	exit(EXIT_FAILURE);
+}
+
+void	ft_exec_cmd(t_pipex *data, char *cmds, char **envp)
+{
+	int	i;
+	char	*command;
+
+	i = -1;
+	data->cmd = ft_split(cmds, ' ');
+	while (data->path[++i])
+	{
+		command = ft_strjoin(data->path[i], "/");
+		command = ft_strjoin(command, data->cmd[0]);
+		if (access(command, F_OK) == 0)
+		{
+			if (execve(command, data->cmd, envp) == -1)
+				ft_printerror("Error executing command");
+		}
+		free(command);
+	}
+	i = -1;
+	while (data->path[++i])
+		free(data->path[i]);
+	free(data->path);
+	i = -1;
+	while (data->cmd[++i])
+		free(data->cmd[i]);
+	free(data->cmd);
+	ft_printerror("Error: No path found for command");
+}
