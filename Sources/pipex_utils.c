@@ -91,7 +91,7 @@ void	ft_exec_cmd(t_pipex *data, char *cmds, char **envp)
 		if (access(command, F_OK) == 0)
 		{
 			if (execve(command, data->cmd, envp) == -1)
-				ft_printerror("Error executing command");
+				ft_printerror("Error: command not found");
 		}
 		free(command);
 	}
@@ -103,5 +103,5 @@ void	ft_exec_cmd(t_pipex *data, char *cmds, char **envp)
 	while (data->cmd[++i])
 		free(data->cmd[i]);
 	free(data->cmd);
-	ft_printerror("Error: No path found for command");
+	ft_printerror("Error: command not found");
 }
