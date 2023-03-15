@@ -6,7 +6,7 @@
 /*   By: febonaer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 14:20:15 by febonaer          #+#    #+#             */
-/*   Updated: 2023/03/02 15:57:32 by febonaer         ###   ########.fr       */
+/*   Updated: 2023/03/15 17:22:47 by febonaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../Includes/pipex.h"
@@ -26,9 +26,8 @@ char	**get_path(char **envp)
 		return (0);
 	path = ft_substr(*envp, 5, ft_strlen(*envp));
 	if (!path)
-		return(0);
+		return (0);
 	res = ft_split(path, ':');
-
 	return (res);
 }
 
@@ -48,18 +47,18 @@ void	pipex(int fd1, int fd2, char **argv, char **envp)
 }
 
 /*static void	ft_wait(t_pipex *data)
-{
-	int	status;
-	int	exit_status;
+  {
+  int	status;
+  int	exit_status;
 
-	waitpid(data->child_pid, &status, 0);
-	if ( WIFEXITED(status) )
-	{
-		exit_status = WEXITSTATUS(status);
-		if (exit_status == 1)
-			exit(EXIT_FAILURE);
-	}
-}*/
+  waitpid(data->child_pid, &status, 0);
+  if ( WIFEXITED(status) )
+  {
+  exit_status = WEXITSTATUS(status);
+  if (exit_status == 1)
+  exit(EXIT_FAILURE);
+  }
+  }*/
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -74,8 +73,6 @@ int	main(int argc, char **argv, char **envp)
 		if (data.child_pid < 0)
 			ft_printerror("Fork error");
 		ft_childprocess(&data, envp, argv);
-		//ft_wait(&data);
-		waitpid(data.child_pid, NULL, 0);
 		data.parent_pid = fork();
 		if (data.parent_pid < 0)
 			ft_printerror("Fork error");

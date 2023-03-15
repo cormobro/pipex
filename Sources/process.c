@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   process.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: febonaer <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/15 16:40:27 by febonaer          #+#    #+#             */
+/*   Updated: 2023/03/15 18:01:33 by febonaer         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../Includes/pipex.h"
 
 void	ft_childprocess(t_pipex *data, char **envp, char **argv)
@@ -10,6 +22,7 @@ void	ft_childprocess(t_pipex *data, char **envp, char **argv)
 		dup2(data->pipe[1], 1);
 		dup2(data->infile, 0);
 		close(data->pipe[0]);
+		data->cmd = ft_split(argv[2], ' ');
 		ft_exec_cmd(data, argv[2], envp);
 	}
 }
@@ -18,7 +31,7 @@ void	ft_parentprocess(t_pipex *data, char **envp, char **argv)
 {
 	if (data->parent_pid == 0)
 	{
-		data->outfile = open(argv[4], O_CREAT | O_WRONLY | O_TRUNC, 0777);
+		data->outfile = open(argv[4], O_CREAT | O_WRONLY | O_TRUNC, 0666);
 		if (data->outfile == -1)
 			ft_printerror("Outfile FD error");
 		dup2(data->pipe[0], 0);

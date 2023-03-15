@@ -6,7 +6,7 @@
 /*   By: febonaer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 14:43:07 by febonaer          #+#    #+#             */
-/*   Updated: 2022/11/03 15:03:40 by febonaer         ###   ########.fr       */
+/*   Updated: 2023/03/15 18:08:24 by febonaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 size_t	ft_strlen(const char *str)
 {
-	size_t i;
+	size_t	i;
 
 	if (!str)
 		return (0);
@@ -79,20 +79,19 @@ void	ft_printerror(char *err)
 
 void	ft_exec_cmd(t_pipex *data, char *cmds, char **envp)
 {
-	int	i;
+	int		i;
 	char	*command;
 
 	i = -1;
 	data->cmd = ft_split(cmds, ' ');
+	if (access(data->cmd[0], F_OK) == 0)
+		execve(data->cmd[0], data->cmd, envp);
 	while (data->path[++i])
 	{
 		command = ft_strjoin(data->path[i], "/");
 		command = ft_strjoin(command, data->cmd[0]);
 		if (access(command, F_OK) == 0)
-		{
-			if (execve(command, data->cmd, envp) == -1)
-				ft_printerror("Error: command not found");
-		}
+			execve(command, data->cmd, envp);
 		free(command);
 	}
 	i = -1;
