@@ -6,7 +6,7 @@
 /*   By: febonaer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 14:04:08 by febonaer          #+#    #+#             */
-/*   Updated: 2023/03/15 16:43:15 by febonaer         ###   ########.fr       */
+/*   Updated: 2023/03/17 15:44:44 by febonaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ char	*ft_strstr(const char *str, const char *substr);
 char	*ft_substr(const char *s, unsigned int start, size_t len);
 size_t	ft_strlen(const char *str);
 char	**ft_split(char const *s, char c);
-void	ft_init_list(t_pipex *list, int fd1, int fd2, char **envp);
 void	pipex(int fd1, int fd2, char **argv, char **envp);
 void	ft_printerror(char *err);
 void	ft_childprocess(t_pipex *data, char **envp, char **argv);

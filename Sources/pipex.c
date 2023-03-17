@@ -6,7 +6,7 @@
 /*   By: febonaer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 14:20:15 by febonaer          #+#    #+#             */
-/*   Updated: 2023/03/15 17:22:47 by febonaer         ###   ########.fr       */
+/*   Updated: 2023/03/17 16:56:05 by febonaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../Includes/pipex.h"
@@ -31,45 +31,24 @@ char	**get_path(char **envp)
 	return (res);
 }
 
-void	ft_init_list(t_pipex *list, int fd1, int fd2, char **envp)
+static void	ft_init_list(t_pipex *data, char **argv)
 {
-	list->infile = fd1;
-	list->outfile = fd2;
-	list->path = get_path(envp);
+	data->infile = open(argv[1], O_RDONLY, 0777);
+	if (data->infile == -1)
+		ft_printerror("Infile FD error");
+	data->outfile = open(argv[4], O_CREAT | O_WRONLY | O_TRUNC, 0666);
+	if (data->outfile == -1)
+		ft_printerror("Outfile FD error");
 }
 
-void	pipex(int fd1, int fd2, char **argv, char **envp)
+static int	ft_close_fd(t_pipex *data)
 {
-	t_pipex	list;
-
-	(void)argv;
-	ft_init_list(&list, fd1, fd2, envp);
+	close(data->pipe[0]);
+	close(data->pipe[1]);
+	close(data->infile);
+	close(data->outfile);
+	return (0);
 }
-/*
-static void	ft_free(t_pipex *data)
-{
-	int i;
-
-	i = 0;
-	if (data->path[0])
-	{
-		while (data->path[i])
-			free(data->path[i++]);
-	}
-}
-static void	ft_wait(t_pipex *data)
-  {
-  int	status;
-  int	exit_status;
-
-  waitpid(data->child_pid, &status, 0);
-  if ( WIFEXITED(status) )
-  {
-  exit_status = WEXITSTATUS(status);
-  if (exit_status == 1)
-  exit(EXIT_FAILURE);
-  }
-  }*/
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -79,6 +58,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		if (pipe(data.pipe) == -1)
 			ft_printerror("Pipe error");
+		ft_init_list(&data, argv);
 		data.child_pid = fork();
 		if (data.child_pid < 0)
 			ft_printerror("Fork error");
@@ -87,14 +67,7 @@ int	main(int argc, char **argv, char **envp)
 		if (data.parent_pid < 0)
 			ft_printerror("Fork error");
 		ft_parentprocess(&data, envp, argv);
-		close(data.pipe[0]);
-		close(data.pipe[1]);
-		close(data.infile);
-		close(data.outfile);
-		//ft_free(&data);
-		//return (0);
-		//waitpid(data.child_pid, NULL, 0);
-		return (0);
+		return (ft_close_fd(&data));
 	}
 	else
 		ft_printerror("Arguments error");
