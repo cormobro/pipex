@@ -30,6 +30,7 @@ typedef struct s_pipex
 	char	**cmd;
 }	t_pipex;
 
+char	**get_path(char **envp);
 char	*ft_strstr(const char *str, const char *substr);
 char	*ft_substr(const char *s, unsigned int start, size_t len);
 size_t	ft_strlen(const char *str);

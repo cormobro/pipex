@@ -45,8 +45,19 @@ void	pipex(int fd1, int fd2, char **argv, char **envp)
 	(void)argv;
 	ft_init_list(&list, fd1, fd2, envp);
 }
+/*
+static void	ft_free(t_pipex *data)
+{
+	int i;
 
-/*static void	ft_wait(t_pipex *data)
+	i = 0;
+	if (data->path[0])
+	{
+		while (data->path[i])
+			free(data->path[i++]);
+	}
+}
+static void	ft_wait(t_pipex *data)
   {
   int	status;
   int	exit_status;
@@ -64,7 +75,6 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	data;
 
-	data.path = get_path(envp);
 	if (argc == 5)
 	{
 		if (pipe(data.pipe) == -1)
@@ -81,7 +91,10 @@ int	main(int argc, char **argv, char **envp)
 		close(data.pipe[1]);
 		close(data.infile);
 		close(data.outfile);
-		waitpid(data.child_pid, NULL, 0);
+		//ft_free(&data);
+		//return (0);
+		//waitpid(data.child_pid, NULL, 0);
+		return (0);
 	}
 	else
 		ft_printerror("Arguments error");
